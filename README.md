@@ -113,6 +113,14 @@ docker model requests --model ai/gemma3 | jq
 ```
 
 
+## Testing with Ollama
+
+### Intall it
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
 ## Further reading
 
 - https://www.docker.com/blog/run-claude-code-locally-docker-model-runner/

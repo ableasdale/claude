@@ -15,6 +15,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("dev.langchain4j:langchain4j:1.10.0")
     implementation("dev.langchain4j:langchain4j-open-ai:1.10.0")
+    implementation("dev.langchain4j:langchain4j-ollama:1.10.0")
 }
 
 tasks.test {
