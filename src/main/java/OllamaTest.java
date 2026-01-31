@@ -8,11 +8,13 @@ public class OllamaTest {
         ChatModel model = OllamaChatModel.builder()
                 .baseUrl("http://localhost:11434")
                 //.modelName("ai/smollm2:360M-Q4_K_M")
-                .modelName("gemma3:1b")
+                //.modelName("gemma3:1b")
+                .modelName("qwen2.5-coder:7b")
                 .build();
 
         //String answer = model.chat("Give me a fact about whales.");
-        String answer = model.chat("What is your name?");
+        //String answer = model.chat("What is your name?");
+        String answer = model.chat("Explain String Theory to me");
         System.out.println(answer);
     }
 }

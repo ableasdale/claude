@@ -121,6 +121,40 @@ docker model requests --model ai/gemma3 | jq
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+```bash
+ollama run gemma3:1b
+```
+
+```bash
+ollama serve
+```
+
+Test with Claude Code
+
+```bash
+ANTHROPIC_BASE_URL=http://localhost:11434 claude --model gemma3:1b
+```
+
+This fails because the model doesn't support tools, so let's try this:
+
+```bash
+ollama run gpt-oss:20b
+```
+
+Not enough RAM in my cheap laptop for that model to run :(
+
+```bash
+ollama run qwen2.5-coder:7b
+```
+
+This runs for me
+
+Now we can test with Claude Code:
+
+```bash
+ANTHROPIC_BASE_URL=http://localhost:11434 claude --model qwen2.5-coder:7b
+```
+
 ## Further reading
 
 - https://www.docker.com/blog/run-claude-code-locally-docker-model-runner/
