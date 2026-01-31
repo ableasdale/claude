@@ -68,6 +68,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 ### Get the Model Runner Started
 
 ```bash
+docker model install-runner
 docker desktop enable model-runner
 ```
 
@@ -115,4 +116,4 @@ docker model requests --model ai/gemma3 | jq
 ## Further reading
 
 - https://www.docker.com/blog/run-claude-code-locally-docker-model-runner/
-
+- https://www.docker.com/blog/run-llms-locally/
