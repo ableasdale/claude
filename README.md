@@ -155,7 +155,83 @@ Now we can test with Claude Code:
 ANTHROPIC_BASE_URL=http://localhost:11434 claude --model qwen2.5-coder:7b
 ```
 
+
+## Debugging notes
+
+```bash
+curl -s http://localhost:11434/api/chat -H "Content-Type: application/json" -d '{ "model": "qwen2.5-coder:7b", "stream": false, "messages": [{"role":"user","content":"What is the temperature in New York? Use the tool."}], "tools": [{ "type":"function", "function":{ "name":"get_temperature", "description":"Get the current temperature for a city", "parameters":{ "type":"object", "required":["city"], "properties":{"city":{"type":"string"}} } } }] }' | jq
+```
+
+The response doesn't appear to be showing any tool calls, see: https://www.reddit.com/r/LocalLLaMA/comments/1pqquuf/qwen_25_coder_ollama_litellm_claude_code/ for more details.
+
+
+ollama run SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL (needs 14GB RAM :()
+
+try also glm-4.7-flash (apparently needs 16GB RAM :()
+
+### Putting it all together
+
+This set of steps actually works for me!
+
+```bash
+// OLLAMA_CONTEXT_LENGTH=65535 ollama run gpt-oss:20b
+OLLAMA_CONTEXT_LENGTH=65535 ollama serve
+ANTHROPIC_AUTH_TOKEN=ollama
+ANTHROPIC_BASE_URL=http://localhost:11434 claude --model gpt-oss:20b
+```
+
+Testing
+
+```bash
+curl -s http://localhost:11434/v1/chat/completions -H "Content-Type: application/json" -d '{ "model": "qwen2.5-coder:7b", "stream": false, "messages": [{"role":"user","content":"What is the temperature in New York? Use the tool."}], "tools": [{ "type":"function", "function":{ "name":"get_temperature", "description":"Get the current temperature for a city", "parameters":{ "type":"object", "required":["city"], "properties":{"city":{"type":"string"}} } } }] }' | jq
+```
+
+```bash
+curl -s http://localhost:11434/api/chat -H "Content-Type: application/json" -d '{ "model": "gpt-oss:20b", "stream": false, "messages": [{"role":"user","content":"What is the temperature in New York? Use the tool."}], "tools": [{ "type":"function", "function":{ "name":"get_temperature", "description":"Get the current temperature for a city", "parameters":{ "type":"object", "required":["city"], "properties":{"city":{"type":"string"}} } } }] }' | jq
+```
+
+GPT-OSS 20 does seem to respond correctly:
+
+```bash
+{
+  "model": "gpt-oss:20b",
+  "created_at": "2026-02-01T16:17:38.855646186Z",
+  "message": {
+    "role": "assistant",
+    "content": "",
+    "thinking": "User wants temperature in New York, we need to call the function get_temperature with city \"New York\".",
+    "tool_calls": [
+      {
+        "id": "call_28nao01m",
+        "function": {
+          "index": 0,
+          "name": "get_temperature",
+          "arguments": {
+            "city": "New York"
+          }
+        }
+      }
+    ]
+  },
+  "done": true,
+  "done_reason": "stop",
+  "total_duration": 3766415882,
+  "load_duration": 160548370,
+  "prompt_eval_count": 134,
+  "prompt_eval_duration": 646967493,
+  "eval_count": 46,
+  "eval_duration": 2937109230
+}
+```
+
+See what models you have available 
+
+```bash
+ollama list
+```
+
 ## Further reading
 
 - https://www.docker.com/blog/run-claude-code-locally-docker-model-runner/
 - https://www.docker.com/blog/run-llms-locally/
+- https://ollama.com/blog/openai-compatibility
