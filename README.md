@@ -230,8 +230,45 @@ See what models you have available
 ollama list
 ```
 
+## How can we confirm that the GPU is also being used?
+
+Open a separate terminal session and run:
+
+```bash
+ollama ps
+```
+
+You should see:
+
+```bash
+NAME           ID              SIZE     PROCESSOR          CONTEXT    UNTIL              
+gpt-oss:20b    17052f91a42e    14 GB    64%/36% CPU/GPU    4096       2 minutes from now  
+```
+
+Note that the output from `nvidia-smi` should also give you some hints that Ollama is making use of your GPU:
+
+```bash
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            4462      G   /usr/bin/gnome-shell                      1MiB |
+|    0   N/A  N/A           78525      C   /usr/local/bin/ollama                  5014MiB |
++-----------------------------------------------------------------------------------------+
+```
+
+## Skills
+
+```bash
+/explain-code src/main/java/OllamaTest.java
+```
+
+
 ## Further reading
 
 - https://www.docker.com/blog/run-claude-code-locally-docker-model-runner/
 - https://www.docker.com/blog/run-llms-locally/
 - https://ollama.com/blog/openai-compatibility
+- https://dzone.com/articles/ollama-ubuntu-local-llm-setup
+- https://code.claude.com/docs/en/sub-agents
