@@ -1,20 +1,28 @@
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
 
 public class OllamaTest {
-    static void main() {
-        // Works against a model hosted using Ollama (gemma3:1b)
 
+    static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    public static void main(String[] args) {
+
+        LOG.info("starting");
         ChatModel model = OllamaChatModel.builder()
-                .baseUrl("http://localhost:11434")
-                //.modelName("ai/smollm2:360M-Q4_K_M")
-                //.modelName("gemma3:1b")
-                .modelName("qwen2.5-coder:7b")
+                .baseUrl(Consts.OLLAMA_BASE_URL)
+                .modelName(Consts.GPT_OSS_20B)
                 .build();
 
         //String answer = model.chat("Give me a fact about whales.");
         //String answer = model.chat("What is your name?");
-        String answer = model.chat("Explain String Theory to me");
-        System.out.println(answer);
+        //String answer = model.chat("Explain String Theory to me");
+        //String answer2 = model.chat("write me a Java Hello World class");
+        String answer3 = model.chat("how long is a piece of string?");
+        LOG.info(answer3);
+
     }
 }

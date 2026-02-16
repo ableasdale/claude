@@ -1,16 +1,20 @@
-# claude
+# Using Claude Code (and langchain4j) to work with Local LLMs
 
-Experiments with Claude Code
+Experiments working with Claude Code with locally hosted LLMs, including Docker Model Runner and Ollama
+
+## Requirements
+
+- Laptop with at least 8GB RAM and some GPU capacity
+- Ubuntu 25.10 (steps should be similar with other recent Ubuntu releases)
+- Ollama
 
 ## Setup
 
-Docker / Docker Model Runner (TODO)
+Docker / Docker Model Runner (TODO - note: at the time this guide was written there were still some issues with Docker Model Runner on Linux)
 
-NVidia Driver (TODO)
+### NVidia Linux Drivers and Cuda
 
-### NVidia Linux Drivers
-
-Find the best driver for your GPU:
+The first step is going to be to find the best driver for your GPU:
 
 ```bash
 sudo ubuntu-drivers devices
@@ -34,6 +38,8 @@ sudo apt install nvidia-driver-590-open
 
 ### Install supporting packages for Docker and NVidia GPUs
 
+Note that the Docker packages (I think?) are required in either case for Docker or 
+
 ```bash
 sudo apt-get install -y nvidia-container-toolkit
 sudo apt install nvidia-docker2
@@ -49,14 +55,36 @@ sudo systemctl restart docker
 
 ### Confirm that everything is set up for the GPU
 
+You can verify the outcome of all prior steps by running `nvidia-smi`:
+
 ```bash
 nvidia-smi
 ```
 
-You should see something like this:
+You should see something like this in the terminal output:
 
 ```bash
-NVIDIA-SMI 590.48.01              Driver Version: 590.48.01      CUDA Version: 13.1 
+❯ nvidia-smi
+Mon Feb 16 14:22:53 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 590.48.01              Driver Version: 590.48.01      CUDA Version: 13.1     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3050 ...    Off |   00000000:01:00.0 Off |                  N/A |
+| N/A   41C    P0             11W /   75W |       8MiB /   6144MiB |      6%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            9825      G   /usr/bin/gnome-shell                      1MiB |
++-----------------------------------------------------------------------------------------+
 ```
 
 ### Install Claude Code
@@ -115,11 +143,28 @@ docker model requests --model ai/gemma3 | jq
 
 ## Testing with Ollama
 
-### Intall it
+### Install it
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
+
+
+Verify the installation by running `ollama -v`:
+
+```bash
+ollama -v
+```
+
+You'll see output like this:
+
+```bash
+ollama version is 0.15.2
+```
+
+
+
+### Run an LLM locally
 
 ```bash
 ollama run gemma3:1b
