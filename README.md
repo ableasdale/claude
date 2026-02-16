@@ -138,6 +138,66 @@ docker model run ai/gemma3
 docker model requests --model ai/gemma3 | jq
 ```
 
+## Ollama: Finding a Model
+
+This guide has been prepared with the following constraints in mind:
+
+- The model needs to run on a machine configured with 8GB available RAM
+- The GPU capacity is 6GB for an on-board NVidia Graphics chip.
+
+Naturally, this rules out a large number of models which would require more available memory and GPU capacity.
+
+The model that has been chosen (so far) for most tasks is `gpt-oss:20b`.  
+
+You can test the prompt by running:
+
+```bash
+ollama run gpt-oss:20b
+```
+
+The model is available to view in Ollama's library at <https://ollama.com/library/gpt-oss:20b>
+
+The most important aspect to consider when choosing a model is to look for flares for `tools` and `thinking` on the model's page.
+
+- <https://docs.ollama.com/capabilities/thinking>
+- <https://docs.ollama.com/capabilities/tool-calling>
+
+### Testing thinking ability
+
+```bash
+curl http://localhost:11434/api/chat -d '{
+  "model": "gpt-oss:20b",
+  "messages": [{
+    "role": "user",
+    "content": "How many letter r appear in the word strawberry?"
+  }],
+  "think": "high",
+  "stream": false
+}' | jq
+```
+
+If the model is correctly supporting `thinking`, then the response JSON should contain a section that looks like this:
+
+```json
+{
+  "model": "gpt-oss:20b",
+  "created_at": "2026-02-16T17:04:06.206055788Z",
+  "message": {
+    "role": "assistant",
+    "content": "3",
+    "thinking": "The user asks: \"How many letter r appear in the word strawberry?\" This is a simple counting question. The word \"strawberry\" spelled s t r a w b e r r y. Count letter 'r': positions 3, 8, 9. So total 3. However, we need to double-check the spelling: strawberry has 2 r's? Wait, the common spelling \"strawberry\" has 's', 't', 'r', 'a', 'w', 'b', 'e', 'r', 'r', 'y'. Yes, that's 3 r's. Some might think it's 2, but it's 3. So the answer: 3. Provide explanation.\n\nThe user might just expect \"3\" or \"three\". But the typical answer: 3. Should we include explanation? Possibly yes: The word has three r's: one after 't', two consecutive at the end before 'y'. Provide the answer. Probably the user expects a short answer.\n\nWe must adhere to instructions: \"If the user asks for a number, respond with the number.\" The user asked \"How many letter r appear in the word strawberry?\" That's a question asking a number. So we can respond with the number \"3\". But we can also add some explanation. The instructions are not super strict. It says \"If the user asks for a number, respond with the number.\" That might mean if they ask for a numeric answer, we can give just the number. But it's okay to give explanation, but the primary content should be the number.\n\nBut the user says: \"How many letter r appear in the word strawberry?\" The straightforward answer: 3. So we can reply with \"3\".\n\nBut we might also add a small explanation: The word contains three r's. But if we strictly follow instruction \"respond with the number,\" then just \"3\". It's ambiguous. But safe to provide the number.\n\nThus answer: 3.\n\nGiven the style guidelines: Provide just the answer. But we can provide a short explanation: \"3\" is the answer. I'll produce \"3\".\n\nBut to ensure compliance: I'll just output \"3\".\n\nLet's respond accordingly."
+  },
+  "done": true,
+  "done_reason": "stop",
+  "total_duration": 32760727512,
+  "load_duration": 316492052,
+  "prompt_eval_count": 77,
+  "prompt_eval_duration": 1948981890,
+  "eval_count": 462,
+  "eval_duration": 30274605133
+}
+```
+
 
 ## Testing with Ollama
 
@@ -174,6 +234,27 @@ To test using cURL:
 curl http://localhost:11434
 ```
 
+### Exploring the `Ollama` ReST API
+
+Check the Ollama version by making a call to `/api/version`
+
+```bash
+curl http://localhost:11434/api/version
+```
+
+This will show you a huge amount of information about the model, the parameters, etc:
+
+```bash
+curl -X POST http://localhost:11434/api/show -d '{ "model": "gpt-oss:20b" }' | jq
+```
+
+Similarly, you can run:
+
+```bash
+curl -X POST http://localhost:11434/api/show -d '{ "model": "gpt-oss:20b", "verbose": false }' | jq
+```
+
+
 
 ### Run an LLM locally
 
@@ -205,7 +286,7 @@ gemma3:1b                                   8648f39daa8f    815 MB    2 weeks ag
 
 ### Removing models to reclaim used disk space
 
-You can delete models by running (for example):
+You can delete models by running `ollama rm <name>` (for example):
 
 ```bash
 ollama rm SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL
