@@ -160,6 +160,19 @@ You'll see output like this:
 ollama version is 0.15.2
 ```
 
+Ensure the ReST API (for Ollama) is accessible by visiting <http://localhost:11434/>
+
+If everything worked okay, then you should see the message:
+
+```
+Ollama is running
+```
+
+To test using cURL:
+
+```bash
+curl http://localhost:11434
+```
 
 
 ### Run an LLM locally
@@ -189,6 +202,17 @@ qwen2.5-coder:7b                            dae161e27b0e    4.7 GB    2 weeks ag
 gpt-oss:20b                                 17052f91a42e    13 GB     2 weeks ago    
 gemma3:1b                                   8648f39daa8f    815 MB    2 weeks ago  
 ```
+
+### Removing models to reclaim used disk space
+
+You can delete models by running (for example):
+
+```bash
+ollama rm SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL
+ollama rm qwen2.5-coder:7b
+```
+
+In each case, running `ollama list` again should show these models are now omitted from the list
 
 ## Test the model with Langchain4J
 
