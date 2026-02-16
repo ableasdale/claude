@@ -198,6 +198,79 @@ If the model is correctly supporting `thinking`, then the response JSON should c
 }
 ```
 
+### Testing tool calling
+
+```bash
+curl -s http://localhost:11434/api/chat -H "Content-Type: application/json" -d '{
+  "model": "gpt-oss:20b",
+  "messages": [{"role": "user", "content": "What are the current weather conditions and temperature in New York and London?"}],
+  "stream": false,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_temperature",
+        "description": "Get the current temperature for a city",
+        "parameters": {
+          "type": "object",
+          "required": ["city"],
+          "properties": {
+            "city": {"type": "string", "description": "The name of the city"}
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_conditions",
+        "description": "Get the current weather conditions for a city",
+        "parameters": {
+          "type": "object",
+          "required": ["city"],
+          "properties": {
+            "city": {"type": "string", "description": "The name of the city"}
+          }
+        }
+      }
+    }
+  ]
+}' | jq
+```
+
+The response should show that the `thinking` section highlights the fact that the request contained the two `tool` calls (`get_temperature` and `get_conditions`) and there should be a `tool_calls` JSON property in the HTTP Response:
+
+```json
+{
+  "model": "gpt-oss:20b",
+  "created_at": "2026-02-16T17:12:59.888061629Z",
+  "message": {
+    "role": "assistant",
+    "content": "",
+    "thinking": "We need to use the provided functions to get temperature and conditions for New York and London. So likely we need to call get_temperature for each city and get_conditions for each city. The user asked: \"What are the current weather conditions and temperature in New York and London?\" We need to answer with data for both cities. We'll call functions. Probably we need to call get_temperature for each, and get_conditions for each. Possibly combine them in one call? The schema has separate functions. We can make two calls: get_temperature for New York, get_conditions for New York; same for London. So four calls. But we might need to combine or we can request both from one call? The instructions: we can use the function definitions. We can call get_temperature with city: \"New York\", get_conditions with city: \"New York\", get_temperature with city: \"London\", get_conditions with city: \"London\". We should format the answer after receiving results. We'll do it sequentially: call get_temperature for New York, then get_conditions for New York, then for London. Let's do that. We'll start with first function call.",
+    "tool_calls": [
+      {
+        "id": "call_ez7x6lx0",
+        "function": {
+          "index": 0,
+          "name": "get_temperature",
+          "arguments": {
+            "city": "New York"
+          }
+        }
+      }
+    ]
+  },
+  "done": true,
+  "done_reason": "stop",
+  "total_duration": 25330253098,
+  "load_duration": 7777138513,
+  "prompt_eval_count": 177,
+  "prompt_eval_duration": 769417649,
+  "eval_count": 255,
+  "eval_duration": 16619154477
+}
+```
 
 ## Testing with Ollama
 
