@@ -6,7 +6,7 @@ Experiments working with Claude Code with locally hosted LLMs, including Docker 
 
 - Laptop with at least 8GB RAM and some GPU capacity
 - Ubuntu 25.10 (steps should be similar with other recent Ubuntu releases)
-- Ollama
+- Ollama (steps tested with 0.15.2)
 
 ## Setup
 
@@ -33,8 +33,6 @@ Install the driver:
 ```bash
 sudo apt install nvidia-driver-590-open
 ```
-
-
 
 ### Install supporting packages for Docker and NVidia GPUs
 
@@ -227,8 +225,13 @@ curl -s http://localhost:11434/api/chat -H "Content-Type: application/json" -d '
 
 The response doesn't appear to be showing any tool calls, see: https://www.reddit.com/r/LocalLLaMA/comments/1pqquuf/qwen_25_coder_ollama_litellm_claude_code/ for more details.
 
+Tried and failed:
 
+TODO - would be interesting to test this model when more RAM is available to me
+
+```
 ollama run SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL (needs 14GB RAM :()
+```
 
 try also glm-4.7-flash (apparently needs 16GB RAM :()
 

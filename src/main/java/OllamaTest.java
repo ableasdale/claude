@@ -11,7 +11,7 @@ public class OllamaTest {
 
     public static void main(String[] args) {
 
-        LOG.info("starting");
+        LOG.info("Starting chat with local LLM model: " + Consts.GPT_OSS_20B);
         ChatModel model = OllamaChatModel.builder()
                 .baseUrl(Consts.OLLAMA_BASE_URL)
                 .modelName(Consts.GPT_OSS_20B)
@@ -21,7 +21,8 @@ public class OllamaTest {
         //String answer = model.chat("What is your name?");
         //String answer = model.chat("Explain String Theory to me");
         //String answer2 = model.chat("write me a Java Hello World class");
-        String answer3 = model.chat("how long is a piece of string?");
+        // String answer3 = model.chat("how long is a piece of string?");
+        String answer3 = model.chat("Hello");
         LOG.info(answer3);
 
     }

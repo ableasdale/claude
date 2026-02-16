@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'OllamaTest'
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("dev.langchain4j:langchain4j:1.11.0")
+    implementation("dev.langchain4j:langchain4j-open-ai:1.11.0")
+    implementation("dev.langchain4j:langchain4j-ollama:1.11.0")
+    implementation("ch.qos.logback:logback-classic:1.5.29")
+    implementation("ch.qos.logback:logback-core:1.5.29")
+}
