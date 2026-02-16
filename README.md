@@ -138,6 +138,30 @@ docker model run ai/gemma3
 docker model requests --model ai/gemma3 | jq
 ```
 
+## Using Ollama
+
+
+
+### Install Ollama
+
+To install `ollama` you can use the following `cURL` call:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Verify the installation by running `ollama -v`:
+
+```bash
+ollama -v
+```
+
+You'll see output like this:
+
+```bash
+ollama version is 0.15.2
+```
+
 ## Ollama: Finding a Model
 
 This guide has been prepared with the following constraints in mind:
@@ -272,28 +296,9 @@ The response should show that the `thinking` section highlights the fact that th
 }
 ```
 
-## Testing with Ollama
+### Ollama ReST API
 
-### Install it
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
-
-
-Verify the installation by running `ollama -v`:
-
-```bash
-ollama -v
-```
-
-You'll see output like this:
-
-```bash
-ollama version is 0.15.2
-```
-
-Ensure the ReST API (for Ollama) is accessible by visiting <http://localhost:11434/>
+Ensure that the HTTP ReST API (for Ollama) is accessible by visiting <http://localhost:11434/>
 
 If everything worked okay, then you should see the message:
 
