@@ -190,6 +190,23 @@ gpt-oss:20b                                 17052f91a42e    13 GB     2 weeks ag
 gemma3:1b                                   8648f39daa8f    815 MB    2 weeks ago  
 ```
 
+## Test the model with Langchain4J
+
+In the root directory of the project, there is a simple test that initiates a conversation with the local model (hosted via HTTP by Ollama); to run the test, run `./gradlew run` from the root:
+
+```bash
+./gradlew run
+```
+
+You should see:
+
+```bash
+> Task :run
+[2026-02-16 15:25:13,368] [INFO] Starting chat with local LLM model: gpt-oss:20b
+[2026-02-16 15:25:17,054] [INFO] Hello! 👋 How can I help you today?
+```
+
+
 ## Test with Claude Code
 
 ```bash

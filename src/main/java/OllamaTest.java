@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.text.MessageFormat;
 
 public class OllamaTest {
 
@@ -11,7 +12,7 @@ public class OllamaTest {
 
     public static void main(String[] args) {
 
-        LOG.info("Starting chat with local LLM model: " + Consts.GPT_OSS_20B);
+        LOG.info(MessageFormat.format("Starting chat with local LLM model: {0}{1}{2}", Consts.ANSI_GREEN, Consts.GPT_OSS_20B, Consts.ANSI_WHITE));
         ChatModel model = OllamaChatModel.builder()
                 .baseUrl(Consts.OLLAMA_BASE_URL)
                 .modelName(Consts.GPT_OSS_20B)
