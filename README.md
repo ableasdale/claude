@@ -129,7 +129,25 @@ ollama run gemma3:1b
 ollama serve
 ```
 
-Test with Claude Code
+### Managing your LLMs in `Ollama`
+
+Run `ollama list` to get a full list of all available models:
+
+```bash
+ollama list
+```
+
+You will see a list like this:
+
+```
+NAME                                        ID              SIZE      MODIFIED    
+SimonPu/Qwen3-Coder:30B-Instruct_Q4_K_XL    fa6d1415a672    17 GB     2 weeks ago    
+qwen2.5-coder:7b                            dae161e27b0e    4.7 GB    2 weeks ago    
+gpt-oss:20b                                 17052f91a42e    13 GB     2 weeks ago    
+gemma3:1b                                   8648f39daa8f    815 MB    2 weeks ago  
+```
+
+## Test with Claude Code
 
 ```bash
 ANTHROPIC_BASE_URL=http://localhost:11434 claude --model gemma3:1b
@@ -264,6 +282,14 @@ Note that the output from `nvidia-smi` should also give you some hints that Olla
 /explain-code src/main/java/OllamaTest.java
 ```
 
+Doesn't seem to be working...
+
+
+## Jvm / Gradle
+
+```bash
+./gradlew wrapper --gradle-version 8.1.1 
+```
 
 ## Further reading
 
@@ -272,3 +298,4 @@ Note that the output from `nvidia-smi` should also give you some hints that Olla
 - https://ollama.com/blog/openai-compatibility
 - https://dzone.com/articles/ollama-ubuntu-local-llm-setup
 - https://code.claude.com/docs/en/sub-agents
+- https://artificialanalysis.ai/models/open-source
